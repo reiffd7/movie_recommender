@@ -6,6 +6,7 @@ Daniel Reiff, Steven Rouk, Scott Peabody, Sarah Forward
 3. [Starting Baseline](#starting-baseline)
 4. [New Proposed Model](#new-proposed-model)
 5. [Precision](#precision)
+5. [Churn](#churn)
 5. [The App](#the-app)
 5. [Proposed Plan of Implimentation](#proposed-plan-of-implimentation)
 
@@ -63,7 +64,9 @@ We want to avoid cases where we recommended a movie that the user does not like.
 
 Precision is the number of correct recommendations divided by the number of all recommendations. It penalizes a model for recommendiong a movie that the user does not actually like. With the ALS model, we imporove precision by 6%. 
 
-We estimate a false positive costs us 1 dollar worth of customer churn, then for these 671 users the ALS model will save us 6936 - 4688 = $2248. For 2 million movie ratings, we would save **$44,960**.
+## Churn
+
+We estimate that each false positive results in a 1% chance than a customer will churn. Each customer has a lifetime value of approximately $100. Therefor a false positive costs us $1 in lost revenue. For the 671 users in this study, the ALS model will save us $6936 - $4688 = $2248. For 2 million movie ratings, we would save **$44,960**.
 
 ## The App
 
