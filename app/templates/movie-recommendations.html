@@ -57,22 +57,14 @@
     <div class="container">
 
       <div class="starter-template">
-        <h1>Your Super Awesome Movie Recommender</h1>
-        <p class="lead">Hey human. You like movies, right?</p>
+        <h1>Oh, <i>you're</i> User {{user_id}}? You're kind of my favorite...<br><br>Here are your movie recommendations.</h1>
       </div>
 
       <div class="jumbotron">
-      <form action="/movie-recommendations" method='POST' >
-        <p class="lead"><b>What's your User ID?</b><br> <input type="text" name="user_id" /></p>
-        <p class="lead"><b>How many movie recommendations do you want?</b><br> <input type="text" name="number_of_movies" /></p>
-        <p class="lead"><br><br><input type="submit" value = 'Get movie recommendations!'/></p>
-      </form>
+        {% for movie in movies %}
+        <p class="lead">{{movie}}</p>
+        {% endfor %}
       </div>
-
-      <!-- <div>
-        <img src="{{url_for('static', filename='ALS-v-MOM.png')}}" class="img-fluid" alt="Responsive image" width=20%>
-        <img src="{{url_for('static', filename='ALS-v-MOM.png')}}" class="img-fluid" alt="Responsive image" width=20%>
-      </div> -->
 
     </div><!-- /.container -->
 

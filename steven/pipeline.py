@@ -53,16 +53,16 @@ if __name__ == "__main__":
     y_pred = [x.est for x in predictions]
 
     # Plot a histogram of our model residuals
-    single_histogram(y_true, y_pred, title=f'Histogram of ALS Model Residuals - RMSE {cv_rmse:.3f}')
+    # single_histogram(y_true, y_pred, title=f'Histogram of ALS Model Residuals - RMSE {cv_rmse:.3f}')
 
     # Do the same for MeanOfMeans, compare results
-    mom = MeanOfMeans()
-    mom_cv_results = cross_validate(mom, data)
-    mom_cv_rmse = mom_cv_results['test_rmse'].mean()
-    mom_predictions = mom.fit(trainset).test(testset)
-    y_true_mom = [x.r_ui for x in mom_predictions]
-    y_pred_mom = [x.est for x in mom_predictions]
-    single_histogram(y_true_mom, y_pred_mom, title=f'Histogram of MOM Model Residuals - RMSE {mom_cv_rmse:.3f}')
+    # mom = MeanOfMeans()
+    # mom_cv_results = cross_validate(mom, data)
+    # mom_cv_rmse = mom_cv_results['test_rmse'].mean()
+    # mom_predictions = mom.fit(trainset).test(testset)
+    # y_true_mom = [x.r_ui for x in mom_predictions]
+    # y_pred_mom = [x.est for x in mom_predictions]
+    # single_histogram(y_true_mom, y_pred_mom, title=f'Histogram of MOM Model Residuals - RMSE {mom_cv_rmse:.3f}')
 
     # Do the same for MeanOfMeans, compare results
     # mom = SVD()
@@ -78,7 +78,7 @@ if __name__ == "__main__":
     #     title=f'Histogram of ALS ({cv_rmse:.3f}) vs. SVD ({mom_cv_rmse:.3f})',
     #     filepath='images/ALS-v-SVD.png')
 
-    double_histogram(y_true, y_pred, y_true_mom, y_pred_mom,
-        label1='ALS', label2='MOM',
-        title=f'Histogram of ALS ({cv_rmse:.3f}) vs. MOM ({mom_cv_rmse:.3f})',
-        filepath='images/ALS-v-MOM.png')
+    # double_histogram(y_true, y_pred, y_true_mom, y_pred_mom,
+    #     label1='ALS', label2='MOM',
+    #     title=f'Histogram of ALS ({cv_rmse:.3f}) vs. MOM ({mom_cv_rmse:.3f})',
+    #     filepath='images/ALS-v-MOM.png')
