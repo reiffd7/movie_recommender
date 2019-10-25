@@ -50,7 +50,7 @@ def movie_recommendations():
     movies = get_movies(user_id)
     movies = movies[:num_movies]
 
-    return render_template('movie-recommendations.html', user_id=user_id, movies=movies)
+    return render_template('movie-recommendations.html', user_id=user_id, movies=movies, favorite_movies=user_favorites[user_id][:10])
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, threaded=True, debug=False) # Make sure to change debug=False for production

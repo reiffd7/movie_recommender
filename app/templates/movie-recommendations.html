@@ -66,6 +66,13 @@
         {% endfor %}
       </div>
 
+      <div class="jumbotron">
+        <h2>User's Movies From Favorite to Least Favorie</h2>
+        {% for movie in favorite_movies %}
+        <p class="lead">{{movie}}</p>
+        {% endfor %}
+      </div>
+
     </div><!-- /.container -->
 
 
