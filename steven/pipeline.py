@@ -1,5 +1,6 @@
 import os
 import sys
+sys.path.append(os.path.abspath('.'))
 
 import numpy as np
 import pandas as pd
@@ -10,6 +11,7 @@ from surprise.reader import Reader
 from surprise.model_selection.split import train_test_split
 from surprise import accuracy
 from steven.ratings_residuals_histogram import single_histogram, double_histogram
+from surprise.model_selection.validation import cross_validate
 
 FILE_DIRECTORY = os.path.split(os.path.realpath(__file__))[0]
 DATA_DIRECTORY = os.path.join(os.path.split(FILE_DIRECTORY)[0], 'data', 'movies')
@@ -39,9 +41,14 @@ if __name__ == "__main__":
     # Get the RMSE of our predictions
     rmse = accuracy.rmse(predictions)
 
+    # Get the cross-validated RMSE of our predictions
+    cv_results = cross_validate(algo, data)
+    cv_rmse = cv_results['test_rmse'].mean()
+    print(f'CV RMSE: {cv_rmse}')
+
     # Get true values and predicted values for our test set
     y_true = [x.r_ui for x in predictions]
     y_pred = [x.est for x in predictions]
 
     # Plot a histogram of our model residuals
-    single_histogram(y_true, y_pred, title=f'Histogram of ALS Model Residuals - RMSE {rmse:.3f}')
+    single_histogram(y_true, y_pred, title=f'Histogram of ALS Model Residuals - RMSE {cv_rmse:.3f}')
