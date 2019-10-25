@@ -38,4 +38,4 @@ def movie_recommendations():
     return render_template('movie-recommendations.html', user_id=user_id, movies=movies)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080, threaded=True, debug=True) # Make sure to change debug=False for production
+    app.run(host='0.0.0.0', port=8080, threaded=True, debug=False) # Make sure to change debug=False for production
