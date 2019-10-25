@@ -1,5 +1,5 @@
 # The Best Movie Recommender EVER! ! !
-
+Daniel Reiff, Steven Rouk, Scott Peabody, Sarah Forward
 
 1. [Overview](#overview)
 2. [Dataset Description](#dataset-description)
@@ -7,6 +7,7 @@
 4. [New Proposed Model](#new-proposed-model)
 5. [Precision](#precision)
 5. [The App](#the-app)
+5. [Proposed Plan of Implimentation](#proposed-plan-of-implimentation)
 
 
 ![EDA](/images/intro.png)
@@ -18,7 +19,7 @@ In the scenario for this hackathon, we are working for the company, **Movies-Leg
 
 ## Description of Dataset
  
- 100,004 users, 9,066 movies, and 671 users. The rating system 
+ 100,004 users, 9,066 movies, and 671 users. The rating system is 0-5. 
 
 
 ![EDA](/images/EDA.png)
@@ -39,6 +40,10 @@ In our new model, we use a method called Alternating Least Squares (ALS).
 
 <li>We repeat back-and-forth between users and movies until our prediction error does not improve with each step.</li>
 
+We tried a number of models. The best performing was ALS. 
+
+Results |
+:-----------
 ![EDA](/images/benchmark.png)
 
 With the ALS model, we see an improvement of 6%. 
@@ -58,7 +63,7 @@ We want to avoid cases where we recommended a movie that the user does not like.
 
 Precision is the number of correct recommendations divided by the number of all recommendations. It penalizes a model for recommendiong a movie that the user does not actually like. With the ALS model, we imporove precision by 6%. 
 
-If a false positive costs us 1 dollar, then for these 671 users the ALS model will save us 6936 - 4688 = $2248. For 2 million movie ratings, we would save **$44,960**.
+We estimate a false positive costs us 1 dollar worth of customer churn, then for these 671 users the ALS model will save us 6936 - 4688 = $2248. For 2 million movie ratings, we would save **$44,960**.
 
 ## The App
 
@@ -66,4 +71,11 @@ If a false positive costs us 1 dollar, then for these 671 users the ALS model wi
 
 ![webapp1](/images/web-app-recommendations.png)
 
+http://3.95.7.113:8080/
 
+## Proposed Plan of Implimentation
+
+We propose to roll out this new recommender to 10% of our users for a three month trial period. At the end of that period, we will evaluate the recommender base on:
+* User feedback on whether they noticed an improved performance of the recommender.
+* Comparing customer churn from the new recommender group and the old recommender group.
+If we receive positive survey results and reduced customer churn, we would then roll out the new recommender to the rest of the customer base.
