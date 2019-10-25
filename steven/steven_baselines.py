@@ -6,27 +6,41 @@ http://surprise.readthedocs.io/en/stable/building_custom_algo.html
 
 import sys
 import numpy as np
-from surprise import AlgoBase, Dataset, evaluate, SVD
+from surprise import AlgoBase, Dataset
 
 class GlobalMean(AlgoBase):
-    def train(self, trainset):
+
+    def __init__(self):
+
+        # Always call base method before doing anything.
+        AlgoBase.__init__(self)
+
+    def fit(self, trainset):
 
         # Here again: call base method before doing anything.
-        AlgoBase.train(self, trainset)
+        AlgoBase.fit(self, trainset)
 
         # Compute the average rating
         self.the_mean = np.mean([r for (_, _, r) in self.trainset.all_ratings()])
+
+        return self
 
     def estimate(self, u, i):
 
         return self.the_mean
 
 
-class MeanofMeans(AlgoBase):
-    def train(self, trainset):
+class MeanOfMeans(AlgoBase):
+
+    def __init__(self):
+
+        # Always call base method before doing anything.
+        AlgoBase.__init__(self)
+
+    def fit(self, trainset):
 
         # Here again: call base method before doing anything.
-        AlgoBase.train(self, trainset)
+        AlgoBase.fit(self, trainset)
 
         users = np.array([u for (u, _, _) in self.trainset.all_ratings()])
         items = np.array([i for (_, i, _) in self.trainset.all_ratings()])
@@ -41,6 +55,8 @@ class MeanofMeans(AlgoBase):
         self.global_mean = ratings.mean()    
         self.user_means = user_means
         self.item_means = item_means
+
+        return self
                             
     def estimate(self, u, i):
         """
@@ -65,12 +81,12 @@ if __name__ == "__main__":
     data = Dataset.load_builtin('ml-100k')
     print("\nGlobal Mean...")
     algo = GlobalMean()
-    evaluate(algo, data)
+    #evaluate(algo, data)
 
     print("\nMeanOfMeans...")
-    algo = MeanofMeans()
-    evaluate(algo, data)
+    algo = MeanOfMeans()
+    #evaluate(algo, data)
 
-    algo = SVD()
-    evaluate(algo, data)
+    #algo = SVD()
+    #evaluate(algo, data)
     

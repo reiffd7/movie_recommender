@@ -10,8 +10,10 @@ from surprise import SVD, SVDpp, NMF
 from surprise.reader import Reader
 from surprise.model_selection.split import train_test_split
 from surprise import accuracy
-from steven.ratings_residuals_histogram import single_histogram, double_histogram
 from surprise.model_selection.validation import cross_validate
+
+from steven.ratings_residuals_histogram import single_histogram, double_histogram
+from steven.steven_baselines import MeanOfMeans
 
 FILE_DIRECTORY = os.path.split(os.path.realpath(__file__))[0]
 DATA_DIRECTORY = os.path.join(os.path.split(FILE_DIRECTORY)[0], 'data', 'movies')
@@ -52,3 +54,31 @@ if __name__ == "__main__":
 
     # Plot a histogram of our model residuals
     single_histogram(y_true, y_pred, title=f'Histogram of ALS Model Residuals - RMSE {cv_rmse:.3f}')
+
+    # Do the same for MeanOfMeans, compare results
+    mom = MeanOfMeans()
+    mom_cv_results = cross_validate(mom, data)
+    mom_cv_rmse = mom_cv_results['test_rmse'].mean()
+    mom_predictions = mom.fit(trainset).test(testset)
+    y_true_mom = [x.r_ui for x in mom_predictions]
+    y_pred_mom = [x.est for x in mom_predictions]
+    single_histogram(y_true_mom, y_pred_mom, title=f'Histogram of MOM Model Residuals - RMSE {mom_cv_rmse:.3f}')
+
+    # Do the same for MeanOfMeans, compare results
+    # mom = SVD()
+    # mom_cv_results = cross_validate(mom, data)
+    # mom_cv_rmse = mom_cv_results['test_rmse'].mean()
+    # mom_predictions = mom.fit(trainset).test(testset)
+    # y_true_mom = [x.r_ui for x in mom_predictions]
+    # y_pred_mom = [x.est for x in mom_predictions]
+    # single_histogram(y_true_mom, y_pred_mom, title=f'Histogram of SVD Model Residuals - RMSE {mom_cv_rmse:.3f}')
+
+    # double_histogram(y_true, y_pred, y_true_mom, y_pred_mom,
+    #     label1='ALS', label2='SVD',
+    #     title=f'Histogram of ALS ({cv_rmse:.3f}) vs. SVD ({mom_cv_rmse:.3f})',
+    #     filepath='images/ALS-v-SVD.png')
+
+    double_histogram(y_true, y_pred, y_true_mom, y_pred_mom,
+        label1='ALS', label2='MOM',
+        title=f'Histogram of ALS ({cv_rmse:.3f}) vs. MOM ({mom_cv_rmse:.3f})',
+        filepath='images/ALS-v-MOM.png')
