@@ -1,8 +1,19 @@
+import os
+import pickle
+
 from flask import Flask, render_template, jsonify, request, redirect, url_for
+
+FILE_DIRECTORY = os.path.split(os.path.realpath(__file__))[0]
+DATA_DIRECTORY = os.path.join(FILE_DIRECTORY, 'data')
+
 app = Flask(__name__)
 
+with open(os.path.join(DATA_DIRECTORY, 'user_recommendations.pkl'), 'rb') as f:
+    user_recommendations = pickle.load(f)
+
 def get_movies(user_id):
-    return ['movie1', 'movie2', 'movie3']
+    return user_recommendations[user_id]
+    #return ['movie1', 'movie2', 'movie3']
 
 # home page
 @app.route('/')
