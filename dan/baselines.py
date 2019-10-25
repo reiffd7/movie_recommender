@@ -6,7 +6,10 @@ http://surprise.readthedocs.io/en/stable/building_custom_algo.html
 
 import sys
 import numpy as np
-from surprise import AlgoBase, Dataset, evaluate, SVD
+from surprise import AlgoBase, Dataset, BaselineOnly, Reader, SVD, SVDpp, SlopeOne, NMF, NormalPredictor, KNNBaseline, KNNBasic, KNNWithMeans, KNNWithZScore, BaselineOnly, CoClustering
+from surprise.model_selection import cross_validate
+import pandas as pd
+
 
 class GlobalMean(AlgoBase):
     def train(self, trainset):
@@ -60,17 +63,41 @@ class MeanofMeans(AlgoBase):
                         self.item_means[i]]))
 
 
+
+
 if __name__ == "__main__":
 
-    data = Dataset.load_builtin('ml-100k')
-    print("\nGlobal Mean...")
-    algo = GlobalMean()
-    evaluate(algo, data)
+    # data = Dataset.load_builtin('ml-100k')
+    # print("\nGlobal Mean...")
+    # algo = GlobalMean()
+    # evaluate(algo, data)
 
-    print("\nMeanOfMeans...")
-    algo = MeanofMeans()
-    evaluate(algo, data)
+    # print("\nMeanOfMeans...")
+    # algo = MeanofMeans()
+    # evaluate(algo, data)
 
-    algo = SVD()
-    evaluate(algo, data)
+    # bsl_options = {'method': 'als',
+    #            'n_epochs': 10,
+    #            'reg_u': 2,
+    #            'reg_i': 5
+    #            }
+    # algo = BaselineOnly(bsl_options=bsl_options)
+    # evaluate(algo, data)
+    ratings_df = pd.read_csv('../data/movies/ratings.csv')
+    reader = Reader(name=None, line_format=u'user item rating', sep=',', rating_scale=(1, 5), skip_lines=0)
+    data = Dataset.load_from_df(ratings_df[['userId', 'movieId', 'rating']], reader)
+    benchmark = []
+    # Iterate over all algorithms
+    for algorithm in [SVD(), SVDpp(), SlopeOne(), NMF(), NormalPredictor(), KNNBaseline(), KNNBasic(), KNNWithMeans(), KNNWithZScore(), BaselineOnly(), CoClustering()]:
+        # Perform cross validation
+        print(algorithm)
+        results = cross_validate(algorithm, data, measures=['RMSE'], cv=3, verbose=False)
+        print(results)
+        # Get results & append algorithm name
+        tmp = pd.DataFrame.from_dict(results).mean(axis=0)
+        tmp = tmp.append(pd.Series([str(algorithm).split(' ')[0].split('.')[-1]], index=['Algorithm']))
+        benchmark.append(tmp)
+        print("appended to benchmark")
+        
+    benchmark_df = pd.DataFrame(benchmark).set_index('Algorithm').sort_values('test_rmse')  
     
