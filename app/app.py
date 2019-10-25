@@ -11,6 +11,9 @@ app = Flask(__name__)
 with open(os.path.join(DATA_DIRECTORY, 'user_recommendations.pkl'), 'rb') as f:
     user_recommendations = pickle.load(f)
 
+with open(os.path.join(DATA_DIRECTORY, 'user_fave_movies.pkl'), 'rb') as f:
+    user_favorites = pickle.load(f)
+
 def get_movies(user_id):
     return user_recommendations[user_id]
     #return ['movie1', 'movie2', 'movie3']
@@ -19,6 +22,18 @@ def get_movies(user_id):
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/get-favorite-movies')
+def get_favorite_movies():
+    return render_template('get-favorite-movies.html')
+
+@app.route('/favorite-movies', methods=['GET', 'POST'])
+def favorite_movies():
+    user_id = request.form['user_id']
+    if not user_id:
+        return redirect('/')
+    user_id = int(user_id)
+    return render_template('favorite-movies.html', favorite_movies=user_favorites[user_id][:10])
 
 @app.route('/movie-recommendations', methods=['GET', 'POST'])
 def movie_recommendations():
