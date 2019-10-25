@@ -76,7 +76,7 @@ We estimate that each false positive results in a 1% chance than a customer will
 
 http://3.95.7.113:8080/
 
-## Proposed Plan of Implimentation
+## Proposed Plan of Implementation
 
 We propose to roll out this new recommender to 10% of our users for a three month trial period. At the end of that period, we will evaluate the recommender base on:
 * User feedback on whether they noticed an improved performance of the recommender.
